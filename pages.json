@@ -1,0 +1,89 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"backgroundColor": "#aaa"
+			}
+		},
+		{
+			"path": "pages/main/index"
+		},
+		{
+			"path": "pages/search/result",
+			"style": {
+				"onReachBottomDistance": 50,
+				"navigationBarTitleText": "查询结果"
+			}
+		},
+		{
+			"path": "pages/search/noResult",
+			"style": {
+				"navigationBarTitleText": "查询结果"
+			}
+		},
+		{
+			"path": "pages/certificate/detail",
+			"style": {
+				"navigationBarTitleText": "证书详情"
+			}
+		},
+		{
+			"path": "pages/history/index",
+			"style": {
+				"onReachBottomDistance": 50,
+				"navigationBarTitleText": "历史记录"
+			}
+		},
+		{
+			"path": "pages/collect/index",
+			"style": {
+				"onReachBottomDistance": 50,
+				"navigationBarTitleText": "收藏夹"
+			}
+		},
+		{
+			"path": "pages/scan/noResult",
+			"style": {
+				"navigationBarTitleText": "查询结果"
+			}
+		},
+		{
+			"path": "pages/scan/result",
+			"style": {
+				"navigationBarTitleText": "CCC认证拍照查询"
+			}
+		},
+		{
+			"path": "pages/scan/match",
+			"style": {
+				"navigationBarTitleText": "查询结果"
+			}
+		},
+		{
+			"path": "pages/scan/noMatch",
+			"style": {
+				"navigationBarTitleText": "查询结果"
+			}
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "授权登录"
+			}
+		},
+		{
+			"path": "pages/serviceAgreement/index",
+			"style": {
+				"navigationBarTitleText": "用户协议"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#fff"
+	}
+}

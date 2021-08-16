@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="94px" height="73px" viewBox="0 0 94 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>路径</title>
+    <defs>
+        <path d="M46,4 C54.3345754,4 61.9887297,6.91322954 67.9997342,11.7769601 L67.9996206,11.7744074 C73.8998396,16.3061112 81.9853241,18.9931222 90,18.9931222 L90,69 L4,69 L4.0493997,19.0008284 C11.3457223,18.7242366 18.0701225,16.2141503 23.5585573,12.1346124 L23.6393704,12.0729578 C29.7034788,7.03166205 37.4976981,4 46,4 Z" id="path-1"></path>
+        <filter x="-7.3%" y="-10.4%" width="114.5%" height="119.2%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="-0.5" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="路径">
+            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>
