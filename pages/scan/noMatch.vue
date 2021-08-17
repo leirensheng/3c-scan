@@ -5,24 +5,32 @@
     <div class="sub-title" v-if="isNoRecomend">
       未查询到与所拍照信息相匹配及相类似的3C证书信息
     </div>
-    <div class="btn" v-if="isNoRecomend" @click="back">重新拍照</div>
+    <div class="btn" v-if="isNoRecomend" @click="toCamera">重新拍照</div>
 
     <div v-else class="bottom">
       <my-tab @change="changeTab"></my-tab>
 
       <div class="items" v-if="tab === 0">
-        <result-item
-          v-for="(item, index) in enList"
-          :key="index"
-          :result="item"
-        ></result-item>
+        <template v-if="enList.length">
+          <result-item
+            v-for="(item, index) in enList"
+            :key="index"
+            :result="item"
+          ></result-item>
+        </template>
+
+        <div v-else class="no-recommend">暂无推荐</div>
       </div>
       <div class="items" v-else>
-        <result-item
-          v-for="(item, index) in specList"
-          :key="index"
-          :result="item"
-        ></result-item>
+        <template v-if="specList.length">
+          <result-item
+            v-for="(item, index) in specList"
+            :key="index"
+            :result="item"
+          ></result-item>
+        </template>
+
+        <div v-else class="no-recommend">暂无推荐</div>
       </div>
     </div>
   </div>
@@ -57,9 +65,9 @@ export default {
     changeTab(i) {
       this.tab = i;
     },
-    back() {
-      uni.naviageteTo({
-        url: "",
+    toCamera() {
+      uni.navigateTo({
+        url: "/pages/scan/camera",
       });
     },
   },
@@ -104,6 +112,11 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 32rpx;
+    }
+    .no-recommend{
+      font-size: 28rpx;
+      margin-top: 30px;
+      line-height: 40rpx;
     }
   }
 }

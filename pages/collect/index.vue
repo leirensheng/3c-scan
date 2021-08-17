@@ -81,6 +81,13 @@ export default {
       date.setDate(date.getDate() - 1);
       this.yesterdayStr = this.formatDate(date);
     },
+    checkIsNoMore(res) {
+      let days = Object.keys(res);
+      if (!days.length) this.noMore = true;
+      days.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+      let oldestDay = days.slice(-1)[0];
+      this.noMore = res[oldestDay].length < 10;
+    },
     async getData(firstPageData) {
       let res = firstPageData;
       if (!firstPageData) {
@@ -91,6 +98,8 @@ export default {
         } catch (e) {}
       }
 
+      this.checkIsNoMore(res);
+
       let lastdayData = this.data.slice(-1)[0];
       let lastday = lastdayData && lastdayData.date;
 
@@ -99,12 +108,8 @@ export default {
         delete res[lastday];
       }
 
-      let days = Object.keys(res).sort(
-        (a, b) => new Date(b).getTime() - new Date(a).getTime()
-      );
-
-      let oldestDay = days.slice(-1)[0];
-      this.noMore = !(res[oldestDay] && res[oldestDay].length === 10);
+      let days = Object.keys(res);
+      days.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
       let data = days.map((date) => ({
         date,
         data: res[date],

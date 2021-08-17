@@ -9,7 +9,6 @@ Vue.prototype.$formatDate = (val) => {
   if (typeof val !== "object") {
     date = new Date(val);
   }
-  console.log(date, typeof val);
   let month = date.getMonth() + 1;
   month = month < 9 ? `0${month}` : month;
   let day = date.getDate();

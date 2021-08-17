@@ -74,27 +74,11 @@ export default {
         this.$toLogin()
         return
       }
-      uni.chooseImage({
-        count: 1,
-        sizeType: ["original", "compressed"],
-        sourceType: ["camera", "album"], //这要注意，camera掉拍照，album是打开手机相册
-        success: (res) => {
-          console.log(res);
-          const tempFilePaths = res.tempFilePaths;
-          //  uni.previewImage({
-          //   urls: res.tempFilePaths,
-          //   longPressActions: {
-          //       itemList: ['发送给朋友', '保存图片', '收藏'],
-          //       success: function(data) {
-          //           console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片');
-          //       },
-          //       fail: function(err) {
-          //           console.log(err.errMsg);
-          //       }
-          //   }
-        // });
-        },
-      });
+      uni.navigateTo({
+        url:'/pages/scan/camera'
+      })
+      return
+
     },
     changeTab(tab) {
       if (tab === "user") {

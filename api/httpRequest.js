@@ -1,6 +1,6 @@
 let baseUrl = process.env.NODE_ENV === 'production'?'':'http://192.168.2.4:38080/3c-identify'
 let http = (option) => {
-  let { timeout = 6000, data, method = "get",url } = option;
+  let { timeout = 16000, data, method = "get",url } = option;
   return new Promise((resolve, reject) => {
     uni.request({
       url: baseUrl + url,

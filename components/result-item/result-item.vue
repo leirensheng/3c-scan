@@ -119,6 +119,7 @@ $dark: rgba(0, 0, 0, 0.85);
       .value {
         font-weight: 500;
         color: $dark;
+        text-align: left;
       }
     }
   }

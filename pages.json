@@ -78,6 +78,10 @@
 			"style": {
 				"navigationBarTitleText": "用户协议"
 			}
+		},
+		{
+			"path": "pages/scan/camera"
+	
 		}
 	],
 	"globalStyle": {

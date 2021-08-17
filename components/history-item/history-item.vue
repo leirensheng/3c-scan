@@ -64,11 +64,11 @@ export default {
             "status",
             "category",
           ]
-        : [];
+        : ['productName','specifications','factory','manufacturer','distributor','importer','agent'];
 
       let temp = this.filterData(fields, this.value);
       let val = encodeURIComponent(JSON.stringify(temp));
-      let url = isSearch ? "/pages/main/index?tab=search&&query=" + val : "";
+      let url = (isSearch ? "/pages/main/index?tab=search&&query="  : "/pages/scan/result?query=")+val;
 
       uni.navigateTo({
         url,

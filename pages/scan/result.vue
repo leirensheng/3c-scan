@@ -19,13 +19,15 @@
       </div>
     </div>
     <div class="bottom">
-      <div class="btn-primary" @click="back">重新拍照</div>
+      <div class="btn-primary" @click="toCamera">重新拍照</div>
       <div class="btn" @click="search">确认</div>
     </div>
   </div>
 </template>
 
 <script>
+import { searchCertificate } from "@/api/identify.js";
+
 export default {
   data() {
     return {
@@ -41,38 +43,39 @@ export default {
         },
         {
           name: "生产商",
-          id: "no",
+          id: "factory",
         },
         {
           name: "制造商",
-          id: "clientName",
+          id: "manufacturer",
         },
         {
           name: "经销商",
-          id: "clientName",
+          id: "distributor",
         },
         {
           name: "进口商",
-          id: "clientName",
+          id: "importer",
         },
         {
           name: "代理商",
-          id: "clientName",
+          id: "agent",
         },
       ],
       form: {},
     };
   },
-  created() {
-    if (!this.query) {
+  onLoad({ query }) {
+    console.log(query);
+    if (!query) {
       this.form = this.data.reduce((prev, cur) => {
         prev[cur.id] = "";
         return prev;
       }, {});
     } else {
-      this.form = { ...this.query };
+      let val = JSON.parse(decodeURIComponent(query));
+      this.form = { ...val };
     }
-    console.log(this.form);
   },
   props: {
     query: {
@@ -85,99 +88,31 @@ export default {
     showDailog() {
       this.dialogShow = true;
     },
-    back() {
-      uni.navigateBack();
-      // setTimeout(() => {
-
-      // }, 1000);
+    toCamera() {
+      uni.navigateTo({
+        url:'/pages/scan/camera'
+      })
     },
-    search() {
+    async search() {
+      if (!this.form.specifications) {
+        uni.showToast({
+          icon: "none",
+          title: "请输入规格型号",
+          duration: 2000,
+        });
+        return;
+      }
+
       uni.showLoading({
         title: "查询中",
       });
       try {
         let params = {
           ...this.form,
-          searchType: 2,
+          searchType: 1,
+          openId: uni.getStorageSync("openId"),
         };
-        let res = {
-          agent: "string",
-          category: "string",
-          certificates: [
-            // {
-            //   category: "分类",
-            //   clientName: "string",
-            //   expireDate: "2021-08-05T07:30:06.497Z",
-            //   id: 0,
-            //   manufacturer: "管理封建士大夫",
-            //   no: "55454",
-            //   productName: "反政府的",
-            //   productSubName: "发范德萨发",
-            //   specifications: "天太热特",
-            //   status: "暂停",
-            //   statusIndex: 1,
-            // },
-          ],
-          clientName: "string",
-          distributor: "string",
-          factory: "string",
-          imageText: "string",
-          importer: "string",
-          manufacturer: "string",
-          no: "string",
-          openId: "string",
-          productName: "string",
-          program: "string",
-          recommendCertificates: {
-            enList: [
-              {
-                category: "分类",
-                clientName: "string",
-                expireDate: "2021-08-05T07:30:06.497Z",
-                id: 0,
-                manufacturer: "管理封建士大夫",
-                no: "55454",
-                productName: "反政府的",
-                productSubName: "发范德萨发",
-                specifications: "天太热特",
-                status: "string",
-                statusIndex: 0,
-              },
-            ],
-            specList: [
-              {
-                category: "string",
-                clientName: "string",
-                expireDate: "2021-08-05T07:30:06.497Z",
-                id: 0,
-                manufacturer: "string",
-                no: "string",
-                productName: "string",
-                productSubName: "string",
-                specifications: "string",
-                status: "string",
-                statusIndex: 0,
-              },
-               {
-                category: "string",
-                clientName: "string",
-                expireDate: "2021-08-05T07:30:06.497Z",
-                id: 0,
-                manufacturer: "string",
-                no: "string",
-                productName: "string",
-                productSubName: "string",
-                specifications: "string",
-                status: "string",
-                statusIndex: 0,
-              },
-            ],
-          },
-          scrollId: "string",
-          searchType: 0,
-          specifications: "string",
-          status: "string",
-        };
+        let res = await searchCertificate(params);
 
         res.certificate = res.certificates ? res.certificates[0] : null;
 
@@ -186,10 +121,7 @@ export default {
 
           uni.navigateTo({ url: "/pages/scan/match?query=" + val });
         } else if (res.recommendCertificates) {
-           uni.setStorageSync(
-            "recommend",
-            res.recommendCertificates
-          );
+          uni.setStorageSync("recommend", res.recommendCertificates);
         } else {
           uni.removeStorageSync("recommend");
         }
