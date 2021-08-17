@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {uploadPic} from '@/api/identify.js'
+import { uploadPic } from "@/api/identify.js";
 export default {
   data() {
     return {
@@ -105,7 +105,7 @@ export default {
       this.loading = false;
     },
     async upload() {
-     return await uploadPic(this.src)
+      return await uploadPic(this.src);
     },
     chooseImage() {
       return new Promise((resolve, reject) => {
@@ -123,6 +123,11 @@ export default {
       });
     },
     error(e) {
+      uni.showToast({
+        icon: "none",
+        title: "请打开摄像头权限，再重新进入本页面",
+        duration: 4000,
+      });
       console.log(e.detail);
     },
   },
@@ -181,7 +186,7 @@ export default {
       .local {
         position: absolute;
         right: 48rpx;
-        top:50%;
+        top: 50%;
         transform: translateY(-50%);
         display: flex;
         flex-direction: column;
@@ -191,11 +196,11 @@ export default {
         width: 118rpx;
         height: 118rpx;
 
-        background-color:  rgba(161, 161, 161, 0.95);;
-        .pic{
-          width: 45rpx;  
+        background-color: rgba(161, 161, 161, 0.95);
+        .pic {
+          width: 45rpx;
         }
-        .name{
+        .name {
           margin-top: 2px;
           font-size: 24rpx;
         }
