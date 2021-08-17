@@ -34,5 +34,5 @@ let http = (option) => {
     });
   });
 };
-
+export {baseUrl}
 export default http

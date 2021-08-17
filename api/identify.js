@@ -1,4 +1,4 @@
-import request from "./httpRequest.js";
+import request,{baseUrl} from "./httpRequest.js";
 
 export function searchCertificate(data) {
   return request({url:`/identify/searchCertificate`,data,method:"POST"});
@@ -28,3 +28,26 @@ export function getDetail(id) {
     return request({url:`/certificateCollection/listPage/${openId}/${page}`,});
   }
   
+
+
+  export function uploadPic(src){
+    return new Promise((resolve, reject) => {
+      uni.uploadFile({
+        url: baseUrl + "/identify/getImageText",
+        fileType: "image",
+        filePath: src,
+        name: "file",
+        success: (res) => {
+          resolve(res);
+        },
+        fail: (e) => {
+          uni.showToast({
+            icon: "none",
+            title: "上传失败",
+            duration: 2000,
+          });
+          reject(e);
+        },
+      });
+    });
+  }

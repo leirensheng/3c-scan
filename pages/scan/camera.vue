@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import {uploadPic} from '@/api/identify.js'
 export default {
   data() {
     return {
@@ -103,31 +104,8 @@ export default {
       this.src = "";
       this.loading = false;
     },
-    upload() {
-      return new Promise((resolve, reject) => {
-        let baseUrl =
-          process.env.NODE_ENV === "production"
-            ? ""
-            : "http://192.168.2.4:38080/3c-identify";
-        console.log(baseUrl);
-        uni.uploadFile({
-          url: baseUrl + "/identify/getImageText",
-          fileType: "image",
-          filePath: this.src,
-          name: "file",
-          success: (res) => {
-            resolve(res);
-          },
-          fail: (e) => {
-            uni.showToast({
-              icon: "none",
-              title: "上传失败",
-              duration: 2000,
-            });
-            reject(e);
-          },
-        });
-      });
+    async upload() {
+     return await uploadPic(this.src)
     },
     chooseImage() {
       return new Promise((resolve, reject) => {
