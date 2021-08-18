@@ -7,10 +7,7 @@
         <image class="icon" mode="widthFix" src="/static/back.svg"></image>
       </div>
     </div>
-    <div
-      class="content"
-      :style="{ height: history ? 'auto' : '228rpx' }"
-    >
+    <div class="content" :style="{ height: history ? 'auto' : '228rpx' }">
       <div v-if="!isLogin" class="no-login" @click="$toLogin">
         <div>你还没有登录，</div>
         <div>请登录后查看历史记录></div>
@@ -40,9 +37,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    isShow: {
+      type: Boolean,
+      default: false,
+    },
   },
   watch: {
-    isLogin: {
+    isShow: {
       immediate: true,
       handler(val) {
         if (val) {
@@ -54,18 +55,20 @@ export default {
   mounted() {},
   methods: {
     async getHistory() {
-      if(!this.isLogin) return
+      if (!this.isLogin) return;
 
       let data = await getHistory();
-      this.firstHistory = data
-      let dates =Object.keys(data)
-      let sorted =  dates.sort((a,b)=> new Date(b).getTime() - new Date(a).getTime())
-      if(dates.length){
-        this.history = data[sorted[0]][0]
+      this.firstHistory = data;
+      let dates = Object.keys(data);
+      let sorted = dates.sort(
+        (a, b) => new Date(b).getTime() - new Date(a).getTime()
+      );
+      if (dates.length) {
+        this.history = data[sorted[0]][0];
       }
     },
     seeMore() {
-      uni.setStorageSync('firstHistory',this.firstHistory)
+      uni.setStorageSync("firstHistory", this.firstHistory);
       uni.navigateTo({
         url: "/pages/history/index",
       });

@@ -44,14 +44,6 @@ export default {
     },
   },
   watch: {
-    isLogin: {
-      immediate: true,
-      handler(val) {
-        if (val) {
-          this.getCollection();
-        }
-      },
-    },
     isShow: {
       immediate: true,
       handler(val) {

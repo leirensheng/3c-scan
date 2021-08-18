@@ -2,7 +2,7 @@
   <div class="user-page">
     <div class="top">
       <div class="left">
-        <image class="icon" mode="widthFix" :src="src"  @click="clickName"/>
+        <image class="icon" mode="widthFix" :src="src" @click="clickName" />
         <span @click="clickName">{{ username }}</span>
       </div>
       <div class="right">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="history">
-      <history :isLogin="isLogin"></history>
+      <history :isShow="isShow" :isLogin="isLogin"></history>
     </div>
     <div class="collect-part">
       <collect :isLogin="isLogin" :isShow="isShow"></collect>
@@ -25,15 +25,14 @@
 <script>
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     src() {
       return this.isLogin ? this.user.avatar : "/static/no-user.svg";
     },
-    username(){
-      return this.isLogin?this.user.nickName:"登录/注册"
+    username() {
+      return this.isLogin ? this.user.nickName : "登录/注册";
     },
     isLogin() {
       return !!this.user;
@@ -44,7 +43,7 @@ export default {
       type: Object,
       default: null,
     },
-        isShow: {
+    isShow: {
       type: Boolean,
       default: false,
     },
@@ -60,7 +59,7 @@ export default {
     },
     toHome() {
       uni.navigateTo({
-        url:'/pages/index/index'
+        url: "/pages/index/index",
       });
     },
   },
