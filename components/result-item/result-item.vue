@@ -24,10 +24,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isFromCollect:{
-      type: Boolean,
-      default: false,
-    }
   },
   data() {
     return {
@@ -71,9 +67,6 @@ export default {
     },
     gotoDetail() {
       let url = "/pages/certificate/detail?id=" + this.result.id
-      if(this.isFromCollect){
-        url+='&&isFromCollect=' + this.isFromCollect
-      }
       uni.navigateTo({
         url
       });

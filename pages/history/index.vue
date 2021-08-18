@@ -37,6 +37,15 @@ export default {
   computed: {},
   onLoad() {},
   mounted() {},
+  async onShow(){
+      let needRefresh = uni.getStorageSync("needRefresh");
+      if(needRefresh){
+        let res = await getHistory(1);
+        let newOne = res[this.todayStr][0]
+        this.data[0].data.unshift(newOne)
+      }
+      uni.removeStorageSync("needRefresh");
+  },
   async onReachBottom() {
     if (this.noMore || this.loading) return;
     await this.getData();

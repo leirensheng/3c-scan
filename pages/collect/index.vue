@@ -10,7 +10,7 @@
           @click="remove(item, one)"
           class="one-collect"
         >
-          <result-item :result="one" isFromCollect></result-item>
+          <result-item :result="one"></result-item>
         </uni-swipe-action-item>
       </uni-swipe-action>
     </div>

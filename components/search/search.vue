@@ -143,6 +143,9 @@ export default {
         } else {
           uni.navigateTo({ url: "/pages/search/noResult" });
         }
+        if (this.$getPrePath() === "pages/history/index") {
+          uni.setStorageSync("needRefresh", 1);
+        }
       } catch (e) {
         console.log(e);
       }

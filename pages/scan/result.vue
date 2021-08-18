@@ -143,6 +143,9 @@ export default {
         uni.navigateTo({
           url: "/pages/scan/noMatch",
         });
+        if (this.$getPrePath() === "pages/history/index") {
+          uni.setStorageSync("needRefresh", 1);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -157,7 +160,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wrap{
+.wrap {
   height: 100%;
 }
 .scan-result {

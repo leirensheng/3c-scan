@@ -20,7 +20,11 @@ Vue.prototype.$formatDate = (val) => {
 Vue.prototype.$toLogin = ()=>{
     uni.navigateTo({url:'/pages/login/index'})
 }
-
+Vue.prototype.$getPrePath = ()=>{
+  let pages = getCurrentPages(); //页面对象
+  let prePage = pages.slice(-2)[0]
+  return prePage&&prePage.route
+}
 
 App.mpType = "app";
 

@@ -203,8 +203,8 @@ export default {
        uni.setStorageSync("collect_remove", this.id);
     }
   },
-  async onLoad({ id, isFromCollect }) {
-    this.isFromCollect = isFromCollect;
+  async onLoad({ id }) {
+    this.isFromCollect = this.$getPrePath() === "pages/collect/index";
     uni.showLoading({
       title: "查询中",
     });
