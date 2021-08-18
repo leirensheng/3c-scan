@@ -5,10 +5,9 @@
       <div class="company">{{ result.clientName }}</div>
     </div>
     <div class="bottom">
-
       <div class="row" v-for="(item, index) in config" :key="index">
         <div class="name">{{ item.name }}</div>
-        <div class="value">{{ getVal(item.type,result[item.id]) }}</div>
+        <div class="value">{{ getVal(item.type, result[item.id]) }}</div>
       </div>
     </div>
   </div>
@@ -25,6 +24,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isFromCollect:{
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
@@ -67,8 +70,12 @@ export default {
       return val
     },
     gotoDetail() {
+      let url = "/pages/certificate/detail?id=" + this.result.id
+      if(this.isFromCollect){
+        url+='&&isFromCollect=' + this.isFromCollect
+      }
       uni.navigateTo({
-        url: "/pages/certificate/detail?id=" + this.result.id,
+        url
       });
     },
   },

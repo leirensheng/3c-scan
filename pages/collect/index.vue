@@ -10,7 +10,7 @@
           @click="remove(item, one)"
           class="one-collect"
         >
-          <result-item :result="one"></result-item>
+          <result-item :result="one" isFromCollect></result-item>
         </uni-swipe-action-item>
       </uni-swipe-action>
     </div>
@@ -41,6 +41,9 @@ export default {
       ],
     };
   },
+  onShow() {
+    this.refreshRemove();
+  },
   created() {
     let firstCollect = uni.getStorageSync("firstCollect");
 
@@ -57,6 +60,26 @@ export default {
   },
   mounted() {},
   methods: {
+    // 从详情页取消收藏,返回后更新页面
+    refreshRemove() {
+      let removeId = uni.getStorageSync("collect_remove");
+      if (removeId) {
+        let i2 = -1;
+        let i = this.data.findIndex((one) => {
+          i2 = one.data.findIndex((_) => _.id === removeId);
+          return i2 !== -1;
+        });
+        if (i !== -1) {
+          if (i2 !== -1) {
+            this.data[i].data.splice(i2, 1);
+            if (this.data[i].data.length === 0) {
+              this.data.splice(i, 1);
+            }
+          }
+        }
+      }
+      uni.removeStorageSync("collect_remove");
+    },
     getShowDate(date) {
       let map = {
         [this.yesterdayStr]: "昨天",
@@ -83,8 +106,8 @@ export default {
     },
     checkIsNoMore(res) {
       let days = Object.keys(res);
-      let total = days.reduce((prev,cur)=>prev+res[cur].length ,0)
-      this.noMore = total<10
+      let total = days.reduce((prev, cur) => prev + res[cur].length, 0);
+      this.noMore = total < 10;
     },
     async getData(firstPageData) {
       let res = firstPageData;

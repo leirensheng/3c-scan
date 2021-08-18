@@ -77,6 +77,7 @@ export default {
   data() {
     return {
       id: "",
+      isFromCollect:false,
       isCollected: false,
       config: [
         {
@@ -197,7 +198,13 @@ export default {
   },
   created() {},
   mounted() {},
-  async onLoad({ id }) {
+  beforeDestroy() {
+    if (this.isFromCollect && !this.isCollected) {
+       uni.setStorageSync("collect_remove", this.id);
+    }
+  },
+  async onLoad({ id, isFromCollect }) {
+    this.isFromCollect = isFromCollect;
     uni.showLoading({
       title: "查询中",
     });
