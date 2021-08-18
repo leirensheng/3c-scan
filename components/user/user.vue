@@ -2,7 +2,7 @@
   <div class="user-page">
     <div class="top">
       <div class="left">
-        <image class="icon" mode="widthFix" :src="src" />
+        <image class="icon" mode="widthFix" :src="src"  @click="clickName"/>
         <span @click="clickName">{{ username }}</span>
       </div>
       <div class="right">
@@ -17,7 +17,7 @@
     </div>
     <div class="tips">
       <span>如何拍照识别？</span>
-      <span class="blue" @click="back">操作指南></span>
+      <span class="blue" @click="toHome">操作指南></span>
     </div>
   </div>
 </template>
@@ -58,8 +58,10 @@ export default {
         this.$toLogin();
       }
     },
-    back() {
-      uni.navigateBack();
+    toHome() {
+      uni.navigateTo({
+        url:'/pages/index/index'
+      });
     },
   },
 };

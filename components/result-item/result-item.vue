@@ -120,6 +120,7 @@ $dark: rgba(0, 0, 0, 0.85);
         font-weight: 500;
         color: $dark;
         text-align: left;
+        word-break: break-all;
       }
     }
   }

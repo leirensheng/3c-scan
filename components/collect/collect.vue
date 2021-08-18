@@ -61,7 +61,6 @@ export default {
       },
     },
   },
-  created() {},
   mounted() {},
   methods: {
     async getCollection() {

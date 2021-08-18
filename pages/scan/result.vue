@@ -1,26 +1,29 @@
 <template>
-  <div class="scan-result">
-    <div class="top">
-      <div class="row" v-for="item in data" :key="item.id">
-        <label class="label" :for="item.id">{{ item.name }}：</label>
-        <input
-          :name="item.id"
-          class="uni-input"
-          v-model="form[item.id]"
-          placeholder="未显示"
-        />
+  <div class="wrap">
+    <div class="scan-result">
+      <div class="top">
+        <div class="row" v-for="item in data" :key="item.id">
+          <label class="label" :for="item.id">{{ item.name }}：</label>
+          <input
+            :name="item.id"
+            class="uni-input"
+            v-model="form[item.id]"
+            placeholder="未显示"
+          />
 
-        <image
-          mode="widthFix"
-          class="icon"
-          src="/static/down.svg"
-          @click="showDailog"
-        />
+          <image
+            mode="widthFix"
+            class="icon"
+            src="/static/down.svg"
+            @click="showDailog"
+          />
+        </div>
       </div>
-    </div>
-    <div class="bottom">
-      <div class="btn-primary" @click="toCamera">重新拍照</div>
-      <div class="btn" @click="search">确认</div>
+
+      <div class="bottom">
+        <div class="btn-primary" @click="toCamera">重新拍照</div>
+        <div class="btn" @click="search">确认</div>
+      </div>
     </div>
   </div>
 </template>
@@ -74,8 +77,17 @@ export default {
       }, {});
     } else {
       let val = JSON.parse(decodeURIComponent(query));
+      this.imageTextSplits = val.imageTextSplits;
       this.form = { ...val };
+      delete this.form.imageText;
+      delete this.form.imageTextSplits;
     }
+    // console.log(this.imageTextSplits)
+
+    this.imageTextSplits = [
+      ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+      ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    ];
   },
   props: {
     query: {
@@ -86,12 +98,15 @@ export default {
 
   methods: {
     showDailog() {
+      console.log(333);
+      this.$refs.popup.open("bottom");
+
       this.dialogShow = true;
     },
     toCamera() {
       uni.navigateTo({
-        url:'/pages/scan/camera'
-      })
+        url: "/pages/scan/camera",
+      });
     },
     async search() {
       if (!this.form.specifications) {
@@ -142,6 +157,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.wrap{
+  height: 100%;
+}
 .scan-result {
   height: 100%;
   display: flex;
@@ -167,6 +185,7 @@ export default {
       .icon {
         position: absolute;
         right: 0;
+        z-index: 99;
         width: 29rpx;
         // height: 16rpx;
       }

@@ -73,6 +73,7 @@ export default {
     font-weight: 400;
   }
   .value {
+    word-break: break-all;
     flex-shrink: 0;
     flex-grow: 0;
     font-weight: 500;

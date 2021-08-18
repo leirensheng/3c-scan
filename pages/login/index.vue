@@ -18,7 +18,9 @@
         <span class="xieyi" @click="gotoServiceAgreement">《用户协议》</span>
       </div>
 
-      <div class="btn" v-if="!hasGetUser" @click="login">授权登录</div>
+      <button class="btn" v-if="!hasGetUser" 
+      :disabled="!isReady"
+      @click="login">授权登录</button>
       <button
         class="btn"
         v-else
@@ -49,6 +51,7 @@ export default {
       code: "",
       isNewApi: false,
       loading: false,
+      isReady:false
     };
   },
   watch: {
@@ -67,6 +70,7 @@ export default {
     this.isNewApi = !!uni.getUserProfile;
     this.code = await getCode("weixin");
     await saveCode(this.code);
+    this.isReady= true
     this.loading = false;
   },
   created() {},
@@ -95,7 +99,7 @@ export default {
     getUser() {},
     // 授权
     async login() {
-      this.loading = true;
+      // this.loading = true;
       try {
         let userinfoRes = await this.getUserInfo();
         userinfoRes.jsCode = this.code;
@@ -108,7 +112,7 @@ export default {
         uni.clearStorageSync();
         console.log(e);
       }
-      this.loading = false;
+      // this.loading = false;
     },
     // 获取手机号码
     getPhoneNumber(res) {

@@ -71,7 +71,6 @@ export default {
       });
     },
     handleSuccess({ data }) {
-      console.log(typeof data);
       let val = JSON.parse(data);
       let res = val.data;
       console.log(res);
@@ -95,6 +94,8 @@ export default {
           return prev;
         }, {});
         obj.imageText = res.imageText;
+        obj.imageTextSplits= res.imageTextSplits;
+
         uni.navigateTo({
           url:
             "/pages/scan/result?query=" +

@@ -38,7 +38,16 @@ export function getDetail(id) {
         filePath: src,
         name: "file",
         success: (res) => {
-          resolve(res);
+          if(res.statusCode === 200){
+            resolve(res);
+          }else{
+            uni.showToast({
+              icon: "none",
+              title: "上传失败",
+              duration: 2000,
+            });
+            reject()
+          }
         },
         fail: (e) => {
           uni.showToast({

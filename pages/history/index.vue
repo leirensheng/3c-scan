@@ -6,7 +6,7 @@
         <history-item :value="one"></history-item>
       </div>
     </div>
-    <load-more v-if="loading"></load-more>
+    <load-more v-if="!noMore"></load-more>
     <div class="no-more" v-else>没有更多了</div>
   </div>
 </template>
@@ -68,10 +68,9 @@ export default {
     },
     checkIsNoMore(res) {
       let days = Object.keys(res);
-      if(!days.length) this.noMore = true
-      days.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-      let oldestDay = days.slice(-1)[0];
-      this.noMore =  res[oldestDay].length<10
+      console.log('days',days)
+      let total = days.reduce((prev,cur)=>prev+res[cur].length ,0)
+      this.noMore = total<10
     },
     async getData(firstPageData) {
       let res = firstPageData;
