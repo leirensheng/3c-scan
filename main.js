@@ -5,6 +5,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$checkLogin = checkLogin;
 
 Vue.prototype.$formatDate = (val) => {
+  if(!val) return '-'
   let date = val;
   if (typeof val !== "object") {
     date = new Date(val);

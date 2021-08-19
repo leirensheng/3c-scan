@@ -51,7 +51,7 @@ export default {
         {
           id: "expireDate",
           name: "到期日期",
-         type:'date'
+          type: "date",
         },
       ],
     };
@@ -59,16 +59,16 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    getVal(type,val){
-      if(type==='date'){
-        return this.$formatDate(val)
+    getVal(type, val) {
+      if (type === "date") {
+        return this.$formatDate(val);
       }
-      return val
+      return val;
     },
     gotoDetail() {
-      let url = "/pages/certificate/detail?id=" + this.result.id
+      let url = "/pages/certificate/detail?id=" + this.result.id;
       uni.navigateTo({
-        url
+        url,
       });
     },
   },
@@ -121,6 +121,12 @@ $dark: rgba(0, 0, 0, 0.85);
         color: $dark;
         text-align: left;
         word-break: break-all;
+        // display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        text-overflow: ellipsis;
       }
     }
   }
