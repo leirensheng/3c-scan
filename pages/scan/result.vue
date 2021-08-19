@@ -6,17 +6,14 @@
           <label class="label" :for="item.id">{{ item.name }}：</label>
           <input
             :name="item.id"
-            class="uni-input"
+            class="input"
             v-model="form[item.id]"
             placeholder="未显示"
           />
 
-          <image
-            mode="widthFix"
-            class="icon"
-            src="/static/down.svg"
-            @click="showDailog"
-          />
+          <div v-if="imageTextSplits.length" class="right" @click="showDailog(item.id)">
+            <image mode="widthFix" class="icon" src="/static/down.svg" />
+          </div>
         </div>
       </div>
 
@@ -25,6 +22,14 @@
         <div class="btn" @click="search">确认</div>
       </div>
     </div>
+
+    <my-dialog v-model="dialogShow">
+      <select-word
+        @close="dialogShow = false"
+        @confirm="setValue"
+        :value="imageTextSplits"
+      ></select-word>
+    </my-dialog>
   </div>
 </template>
 
@@ -34,6 +39,7 @@ import { searchCertificate } from "@/api/identify.js";
 export default {
   data() {
     return {
+      imageTextSplits: [],
       dialogShow: false,
       data: [
         {
@@ -84,10 +90,26 @@ export default {
     }
     // console.log(this.imageTextSplits)
 
-    this.imageTextSplits = [
-      ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
-      ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
-    ];
+    // this.imageTextSplits = [
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "发范德萨发非人非微软"],
+
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司45558"],
+
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+
+    //   ["经销商", "：", "迪士尼", "商贸", "(", "上海", ")", "有限公司"],
+    // ];
   },
   props: {
     query: {
@@ -97,10 +119,11 @@ export default {
   },
 
   methods: {
-    showDailog() {
-      console.log(333);
-      this.$refs.popup.open("bottom");
-
+    setValue(val) {
+      this.form[this.editingId] = val;
+    },
+    showDailog(id) {
+      this.editingId = id;
       this.dialogShow = true;
     },
     toCamera() {
@@ -184,12 +207,16 @@ export default {
       }
       :nth-child(2) {
         flex: 1;
+        margin-right: 60rpx;
       }
-      .icon {
+      .right {
         position: absolute;
         right: 0;
         z-index: 99;
-        width: 29rpx;
+        padding: 10rpx;
+        .icon {
+          width: 29rpx;
+        }
         // height: 16rpx;
       }
     }

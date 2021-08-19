@@ -29,7 +29,7 @@
           <key-value
             :data="result"
             :config="config3"
-            :valueWidth="400"
+            :valueWidth="370"
           ></key-value>
         </div>
       </div>
@@ -117,6 +117,7 @@ export default {
         {
           id: "firstIssueDate",
           name: "初次获证",
+          type:'date',
         },
         {
           id: "expireDate",
@@ -174,7 +175,8 @@ export default {
         {
           id: "issueOrgExpire",
           name: "发证机构有效期",
-          width: 220,
+          width: 230,
+          type:'date',
           lightName: true,
         },
 
