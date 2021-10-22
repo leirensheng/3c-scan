@@ -7,19 +7,25 @@
         <image class="icon" mode="widthFix" src="/static/back.svg"></image>
       </div>
     </div>
-    <div class="content" :style="{ height: collect&&isLogin ? 'auto' : '308rpx' }">
-      <div v-if="!isLogin" class="no-login" @click="$toLogin">
+    <div
+      class="content"
+    >
+      <div v-if="!isLogin" class="no-login has-height" @click="$toLogin">
         <div>你还没有登录，</div>
         <div>请登录后查看收藏夹></div>
       </div>
 
-      <div class="no-data" v-else-if="!loading&&!collect">
+      <div class="has-height no-data" v-else-if="!loading && !collect">
         <div class="name">暂无收藏内容</div>
         <image class="icon" mode="widthFix" src="/static/no-data.svg"></image>
       </div>
 
       <div v-else class="has-content">
-        <result-item isInUser :result="valueForResultItem" :loading="loading"></result-item>
+        <result-item
+          isInUser
+          :result="valueForResultItem"
+          :loading="loading"
+        ></result-item>
       </div>
     </div>
   </div>
@@ -45,9 +51,9 @@ export default {
       default: false,
     },
   },
-  computed:{
-    valueForResultItem(){
-      return this.collect||{}
+  computed: {
+    valueForResultItem() {
+      return this.collect || {};
     },
   },
   watch: {
@@ -63,9 +69,9 @@ export default {
   mounted() {},
   methods: {
     async getCollection() {
-      if(!this.isLogin) return
-      this.loading = true
-      let start  = Date.now()
+      if (!this.isLogin) return;
+      this.loading = true;
+      let start = Date.now();
       let data = await getCollection();
       this.firstCollect = data;
       let dates = Object.keys(data);
@@ -74,18 +80,17 @@ export default {
       );
       if (dates.length) {
         this.collect = data[sorted[0]][0];
-      }else{
-        this.collect = null
+      } else {
+        this.collect = null;
       }
-      let useTime = (Date.now() - start)
-      let minTime = 300
-      if(useTime<minTime){
+      let useTime = Date.now() - start;
+      let minTime = 350;
+      if (useTime < minTime) {
         setTimeout(() => {
-      this.loading = false
-          
+          this.loading = false;
         }, minTime - useTime);
-      }else{
-        this.loading = false
+      } else {
+        this.loading = false;
       }
     },
     seeMore() {
@@ -138,6 +143,13 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    .has-height{
+      height: 300rpx;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+    }
     .no-login,
     .no-data {
       font-size: 28rpx;
@@ -154,7 +166,7 @@ export default {
         width: 360rpx;
       }
     }
-    .loading{
+    .loading {
       font-size: 28rpx;
       text-align: center;
     }
