@@ -1,13 +1,13 @@
 <template>
   <div class="my-tab">
     <div class="left" @click="change(0)">
-      <div class="name" :class="active === 0 && 'active'">按同一企业推荐</div>
+      <div class="name" :class="value === 0 && 'active'">按同一企业推荐</div>
     </div>
-    <div class="left-angle" v-if="active === 0"></div>
+    <div class="left-angle" v-if="value === 0"></div>
     <div class="right-angle" v-else></div>
 
     <div class="right" @click="change(1)">
-      <div class="name" :class="active === 1 && 'active'">按同一型号推荐</div>
+      <div class="name" :class="value === 1 && 'active'">按同一型号推荐</div>
     </div>
   </div>
 </template>
@@ -16,15 +16,19 @@
 export default {
   data() {
     return {
-      active: 0,
     };
+  },
+  props:{
+    value:{
+      type:Number,
+      default: 0
+    }
   },
   created() {},
   mounted() {},
   methods: {
     change(i) {
-      this.active = i;
-      this.$emit("change", i);
+      this.$emit('input',i)
     },
   },
 };

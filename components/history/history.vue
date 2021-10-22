@@ -7,17 +7,24 @@
         <image class="icon" mode="widthFix" src="/static/back.svg"></image>
       </div>
     </div>
-    <div class="content" :style="{ height: history ? 'auto' : '228rpx' }">
+    <div class="content" :style="{ height: history&&isLogin ? 'auto' : '228rpx' }">
       <div v-if="!isLogin" class="no-login" @click="$toLogin">
         <div>你还没有登录，</div>
         <div>请登录后查看历史记录></div>
       </div>
-      <div class="no-data" v-else-if="!history">
+
+      <div class="no-data" v-else-if="!loading && !history">
         <div class="name">暂无历史记录</div>
-        <image class="icon" mode="widthFix" src="/static/no-data.png"></image>
+        <image class="icon" mode="widthFix" src="/static/no-data.svg"></image>
       </div>
       <div class="has-content" v-else>
-        <history-item :value="history" :isShowType="false"></history-item>
+        <history-item
+          :value="valueForHistory"
+          isInUserComponent
+          :loading="loading"
+          :isShowType="false"
+          @changeQuery="(val) => $emit('changeQuery', val)"
+        ></history-item>
       </div>
     </div>
   </div>
@@ -29,6 +36,7 @@ import { getHistory } from "@/api/identify.js";
 export default {
   data() {
     return {
+      loading: true,
       history: null,
     };
   },
@@ -40,6 +48,11 @@ export default {
     isShow: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    valueForHistory() {
+      return this.history || {};
     },
   },
   watch: {
@@ -56,7 +69,8 @@ export default {
   methods: {
     async getHistory() {
       if (!this.isLogin) return;
-
+      let start = Date.now();
+      this.loading = true;
       let data = await getHistory();
       this.firstHistory = data;
       let dates = Object.keys(data);
@@ -65,6 +79,17 @@ export default {
       );
       if (dates.length) {
         this.history = data[sorted[0]][0];
+      } else {
+        this.history = null;
+      }
+      let useTime = Date.now() - start;
+      let minTime = 300;
+      if (useTime < minTime) {
+        setTimeout(() => {
+          this.loading = false;
+        }, minTime - useTime);
+      } else {
+        this.loading = false;
       }
     },
     seeMore() {
@@ -79,13 +104,13 @@ export default {
 
 <style scoped lang="scss">
 .history {
-  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 12rpx 0px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   padding: 26rpx 24rpx;
   background-color: white;
   .top {
     padding-bottom: 16rpx;
-    border-bottom: 1px solid #d4d4d4;
+    border-bottom: 1rpx solid #d4d4d4;
     display: flex;
     justify-content: space-between;
 
@@ -130,6 +155,10 @@ export default {
     }
     .has-content {
       width: 100%;
+    }
+    .loading {
+      font-size: 28rpx;
+      text-align: center;
     }
     //   flex-direction: column;
     //   align-items: center;

@@ -15,6 +15,7 @@
         :style="{
             width: valueWidth+'rpx',
           color: item.lightName ? '#999999' : 'rgba(0, 0, 0, 0.85)',
+          fontWeight: item.lightName ? '400' : '500',
         }"
       >
         {{ item.formatter(data[item.id]) }}
@@ -66,10 +67,9 @@ export default {
   justify-content: space-between;
   margin: 20rpx 0;
   font-size: 28rpx;
-  gap: 0 24rpx;
   .name {
     line-height: 44rpx;
-    margin-right: 24rpx;
+    // margin-right: 24rpx;
     font-weight: 400;
   }
   .value {
@@ -77,7 +77,8 @@ export default {
     flex-shrink: 0;
     flex-grow: 0;
     font-weight: 500;
-    line-height: 36rpx;
+    line-height: 1.8em;
+    text-align: justify;
   }
 }
 </style>

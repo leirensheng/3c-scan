@@ -1,5 +1,16 @@
 <template>
   <view class="scan-page">
+   <div class="back"
+      :style="{top:top+'px',height:height+'px'}"
+   >
+    <image
+      class="back-icon"
+      mode="widthFix"
+      src="/static/back2.svg"
+      @click="back"
+    ></image>
+
+   </div>
     <div class="scan" v-if="!src">
       <camera
         device-position="back"
@@ -9,7 +20,8 @@
       ></camera>
       <div class="bottom">
         <div class="desc">拍取产品名称／规格型号／制造商</div>
-        <div class="pic-btn" @click="analyse"></div>
+          <image class="pic-btn" mode="widthFix" src="/static/shot.svg" @click="analyse"></image>
+
         <div class="local" @click="analyse('local')">
           <image class="pic" mode="widthFix" src="/static/camera.svg"></image>
           <span class="name">相册</span>
@@ -31,11 +43,21 @@ export default {
   data() {
     return {
       src: "",
+      top:'',
+      height:'',
       loading: false,
       data: {},
     };
   },
+  onLoad(){
+    let {height,top}= uni.getMenuButtonBoundingClientRect()
+    this.height = height
+    this.top = top
+  },
   methods: {
+    back() {
+      uni.navigateBack();
+    },
     async analyse(type) {
       let src;
       if (type === "local") {
@@ -73,7 +95,6 @@ export default {
     handleSuccess({ data }) {
       let val = JSON.parse(data);
       let res = val.data;
-      console.log(res);
       let keys = [
         "productName",
         "specifications",
@@ -83,7 +104,7 @@ export default {
         "importer",
         "agent",
       ];
-      let isNoResult = keys.every((key) => !res[key]);
+      let isNoResult = res.imageText===''
       if (isNoResult) {
         uni.navigateTo({
           url: "/pages/scan/noResult",
@@ -94,8 +115,7 @@ export default {
           return prev;
         }, {});
         obj.imageText = res.imageText;
-        obj.imageTextSplits= res.imageTextSplits;
-
+        obj.imageTextSplits = res.imageTextSplits;
         uni.navigateTo({
           url:
             "/pages/scan/result?query=" +
@@ -137,6 +157,21 @@ export default {
 
 <style scoped lang="scss">
 .scan-page {
+  position: relative;
+  .back{
+    position: absolute;
+    background: transparent;
+    width: 150rpx;
+    z-index: 4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    .back-icon {
+      z-index: 5;
+      width: 25px;
+    }
+  }
+
   height: 100%;
   .scan {
     height: 100%;
@@ -160,29 +195,10 @@ export default {
       .desc {
         font-weight: bold;
         font-size: 32rpx;
-        margin-bottom: 24rpx;
+        margin-bottom: 34rpx;
       }
       .pic-btn {
-        width: 118rpx;
-        height: 118rpx;
-        border-radius: 50%;
-        background-color: white;
-        border: 2px solid grey;
-        position: relative;
-
-        &:before {
-          display: block;
-          content: "";
-          position: absolute;
-          width: 144rpx;
-          height: 144rpx;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          border-radius: 50%;
-          // background-color: red;
-          background-color: rgba(255, 255, 255, 0.5);
-        }
+        width: 144rpx;
       }
       .local {
         position: absolute;
@@ -210,6 +226,10 @@ export default {
   }
   .scaning {
     position: relative;
+    min-height: 100vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
     .preview {
       width: 100%;
     }

@@ -2,33 +2,38 @@
   <div class="login">
     <image class="pic" mode="widthFix" src="/static/logo.png"></image>
     <div class="title">CCC认证智能识别工具</div>
-    <div class="sub-title" v-if="!hasGetUser">
+    <!-- <div class="sub-title" v-if="!hasGetUser">
       您暂未授权CCC认证智能识别工具小程序获取你的信息，将无法正常使用小程序功能。如需正常使用，请点击“授权”按钮，打开头像、昵称等信息的授权。
-    </div>
+    </div> -->
 
     <div class="bottom">
-      <div class="agree" v-if="hasGetUser">
+      <div class="agree">
         <radio
           value="1"
           :checked="isAgree"
           style="transform: scale(0.6)"
           color="#327CF9"
           @click="clickAgreeRadio"
-        /><span @click="clickAgreeRadio">我已阅读并同意质量抽检数据助手</span>
+        /><span @click="clickAgreeRadio">我已阅读并同意 CCC认证智能识别工具</span>
         <span class="xieyi" @click="gotoServiceAgreement">《用户协议》</span>
       </div>
 
-      <button class="btn" v-if="!hasGetUser" 
-      :disabled="!isReady"
-      @click="login">授权登录</button>
       <button
         class="btn"
-        v-else
-        :disabled="!isAgree"
-        open-type="getPhoneNumber"
-        @getphonenumber="getPhoneNumber"
+        :disabled="!isReady||!isAgree"
+        @click="login"
       >
-        <image class="icon" mode="widthFix" src="/static/wechat.png"></image>
+        <image
+          class="icon enabled"
+          mode="widthFix"
+          src="/static/wechat.svg"
+        ></image>
+        <image
+          class="icon disabled"
+          mode="widthFix"
+          src="/static/wechat-disabled.svg"
+        ></image>
+
         <span>微信用户快捷登录</span>
       </button>
 
@@ -38,10 +43,8 @@
 </template>
 
 <script>
-import { saveUserInfo, savePhone, saveCode } from "@/api/login.js";
-
+import { saveUserInfo,  saveCode } from "@/api/login.js";
 import { getCode, newGetUserInfo, oldGetUserInfo } from "./login.js";
-// import { saveCode } from "@/api/index.js";
 
 export default {
   data() {
@@ -51,7 +54,7 @@ export default {
       code: "",
       isNewApi: false,
       loading: false,
-      isReady:false
+      isReady: false,
     };
   },
   watch: {
@@ -70,7 +73,7 @@ export default {
     this.isNewApi = !!uni.getUserProfile;
     this.code = await getCode("weixin");
     await saveCode(this.code);
-    this.isReady= true
+    this.isReady = true;
     this.loading = false;
   },
   created() {},
@@ -108,35 +111,15 @@ export default {
         uni.setStorageSync("openId", user.openId);
         console.log("用户信息缓存成功");
         this.hasGetUser = true;
+        uni.setStorageSync("jsCode", this.code);
+        uni.navigateBack();
       } catch (e) {
         uni.clearStorageSync();
         console.log(e);
       }
       // this.loading = false;
     },
-    // 获取手机号码
-    getPhoneNumber(res) {
-      let secretData = res.detail;
-      let errMsg = res.detail.errMsg;
-      if (errMsg.indexOf("fail") >= 0) {
-        uni.showToast({
-          icon: "none",
-          title: "微信快捷登录失败：用户未授权",
-        });
-        return;
-      }
 
-      this.savePhone(secretData);
-    },
-    async savePhone(secretData) {
-      secretData.openId = uni.getStorageSync("openId");
-      secretData.jsCode = this.code;
-      let data = await savePhone(secretData);
-      uni.setStorageSync("bandPhone", data.phoneNumber);
-      uni.setStorageSync("jsCode", this.code);
-      console.log("手机号码缓存成功");
-      uni.navigateBack();
-    },
     // 服务协议
     gotoServiceAgreement() {
       uni.navigateTo({
@@ -161,7 +144,7 @@ export default {
   text-align: center;
   .pic {
     width: 160rpx;
-    margin-top: 114rpx;
+    margin-top: 174rpx;
   }
   .title {
     font-weight: 500;
@@ -185,6 +168,7 @@ export default {
   }
   .icon {
     width: 40rpx;
+    margin-right: 12rpx;
   }
   .agree {
     font-size: 28rpx;
@@ -208,10 +192,29 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12rpx;
     width: 700rpx;
     margin: 0 auto;
     margin-top: 32rpx;
+  }
+  .btn[aria-disabled="false"] {
+    .icon {
+      &.enabled {
+        display: block;
+      }
+      &.disabled {
+        display: none;
+      }
+    }
+  }
+  .btn[aria-disabled="true"] {
+    .icon {
+      &.enabled {
+        display: none;
+      }
+      &.disabled {
+        display: block;
+      }
+    }
   }
 }
 </style>

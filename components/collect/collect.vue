@@ -7,18 +7,19 @@
         <image class="icon" mode="widthFix" src="/static/back.svg"></image>
       </div>
     </div>
-    <div class="content" :style="{ height: collect ? 'auto' : '308rpx' }">
+    <div class="content" :style="{ height: collect&&isLogin ? 'auto' : '308rpx' }">
       <div v-if="!isLogin" class="no-login" @click="$toLogin">
         <div>你还没有登录，</div>
-        <div>请登录后查看历史记录></div>
-      </div>
-      <div class="no-data" v-else-if="!collect">
-        <div class="name">暂无收藏内容</div>
-        <image class="icon" mode="widthFix" src="/static/no-data.png"></image>
+        <div>请登录后查看收藏夹></div>
       </div>
 
-      <div v-if="collect" class="has-content">
-        <result-item isInUser :result="collect"></result-item>
+      <div class="no-data" v-else-if="!loading&&!collect">
+        <div class="name">暂无收藏内容</div>
+        <image class="icon" mode="widthFix" src="/static/no-data.svg"></image>
+      </div>
+
+      <div v-else class="has-content">
+        <result-item isInUser :result="valueForResultItem" :loading="loading"></result-item>
       </div>
     </div>
   </div>
@@ -30,6 +31,7 @@ import { getCollection } from "@/api/identify.js";
 export default {
   data() {
     return {
+      loading: true,
       collect: null,
     };
   },
@@ -41,6 +43,11 @@ export default {
     isShow: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed:{
+    valueForResultItem(){
+      return this.collect||{}
     },
   },
   watch: {
@@ -57,9 +64,10 @@ export default {
   methods: {
     async getCollection() {
       if(!this.isLogin) return
+      this.loading = true
+      let start  = Date.now()
       let data = await getCollection();
       this.firstCollect = data;
-      console.log(data);
       let dates = Object.keys(data);
       let sorted = dates.sort(
         (a, b) => new Date(b).getTime() - new Date(a).getTime()
@@ -68,6 +76,16 @@ export default {
         this.collect = data[sorted[0]][0];
       }else{
         this.collect = null
+      }
+      let useTime = (Date.now() - start)
+      let minTime = 300
+      if(useTime<minTime){
+        setTimeout(() => {
+      this.loading = false
+          
+        }, minTime - useTime);
+      }else{
+        this.loading = false
       }
     },
     seeMore() {
@@ -82,7 +100,7 @@ export default {
 
 <style scoped lang="scss">
 .collect {
-  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 12rpx 0px rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   padding: 26rpx 0;
   padding-bottom: 0;
@@ -90,7 +108,7 @@ export default {
   .top {
     margin: 0 24rpx;
     padding-bottom: 16rpx;
-    border-bottom: 1px solid #d4d4d4;
+    border-bottom: 1rpx solid #d4d4d4;
     display: flex;
     justify-content: space-between;
 
@@ -135,6 +153,10 @@ export default {
       .icon {
         width: 360rpx;
       }
+    }
+    .loading{
+      font-size: 28rpx;
+      text-align: center;
     }
     .has-content {
       width: 100%;

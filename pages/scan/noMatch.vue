@@ -8,35 +8,39 @@
     <div class="btn" v-if="isNoRecomend" @click="toCamera">重新拍照</div>
 
     <div v-else class="bottom">
-      <my-tab @change="changeTab"></my-tab>
+      <my-tab v-model="tab"></my-tab>
 
       <div class="items" v-if="tab === 0">
         <template v-if="enList.length">
-          <result-item
-            v-for="(item, index) in enList"
-            :key="index"
-            :result="item"
-          ></result-item>
+          <div v-for="(item, index) in enList" class="item" :key="index">
+            <result-item :result="item"></result-item>
+          </div>
         </template>
 
-        <div v-else class="no-recommend">暂无推荐</div>
+        <div v-else class="no-recommend">
+          <image class="icon" mode="widthFix" src="/static/no-data.svg"></image>
+          <div class="desc">暂无同一企业推荐</div>
+        </div>
       </div>
       <div class="items" v-else>
         <template v-if="specList.length">
-          <result-item
-            v-for="(item, index) in specList"
-            :key="index"
-            :result="item"
-          ></result-item>
+          <div class="item" v-for="(item, index) in specList" :key="index">
+            <result-item :result="item"></result-item>
+          </div>
         </template>
 
-        <div v-else class="no-recommend">暂无推荐</div>
+        <div v-else class="no-recommend">
+          <image class="icon" mode="widthFix" src="/static/no-data.svg"></image>
+          <div class="desc">暂无同一型号推荐</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getCertificateByHistory } from "@/api/identify.js";
+
 export default {
   data() {
     return {
@@ -52,23 +56,43 @@ export default {
   },
   created() {},
   mounted() {},
-  onLoad() {
-    let recommend = uni.getStorageSync("recommend");
+  async onLoad({ historyId }) {
+    let recommend;
+    if (historyId) {
+      uni.showLoading({
+        title: "查询中",
+      });
+      try {
+        let res = await getCertificateByHistory(historyId);
+        recommend = res.recommendCertificates;
+      } catch (e) {
+        console.log(e);
+      }
+      uni.hideLoading();
+    } else {
+      recommend = uni.getStorageSync("recommend");
+    }
     if (recommend) {
       let { enList, specList } = recommend;
       this.enList = enList;
       this.specList = specList;
+      if (this.enList.length === 0 && this.specList.length) {
+        this.tab = 1;
+      }
     }
   },
 
   methods: {
-    changeTab(i) {
-      this.tab = i;
-    },
     toCamera() {
-      uni.navigateTo({
-        url: "/pages/scan/camera",
-      });
+      let pages = getCurrentPages(); //页面对象
+      let prePage = pages.slice(-3)[0];
+      if (prePage.route === "pages/scan/camera") {
+        uni.navigateBack({ delta: 2 });
+      } else {
+        uni.redirectTo({
+          url: "/pages/scan/camera",
+        });
+      }
     },
   },
 };
@@ -109,14 +133,27 @@ export default {
     .items {
       background-color: #f5f5f5;
       padding: 32rpx 24rpx;
-      display: flex;
-      flex-direction: column;
-      gap: 32rpx;
+      .item {
+        margin: 32rpx 0;
+        &:first-child {
+          margin-top: 0;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
-    .no-recommend{
+    .no-recommend {
       font-size: 28rpx;
       margin-top: 30px;
       line-height: 40rpx;
+      .icon {
+        width: 384rpx;
+        transform: translateX(5%);
+      }
+      .desc {
+        margin-top: 32rpx;
+      }
     }
   }
 }

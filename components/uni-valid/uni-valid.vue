@@ -32,7 +32,10 @@ export default {
     },
     name(){
        let name = 'cancel'
-      if(this.status==='有效'){
+       if(this.status===''){
+         name = 'loading-valid'
+       }
+      else if(this.status==='有效'){
         name= 'valid'
       }else if(this.status.length>2){
         name="expired"
@@ -43,7 +46,7 @@ export default {
 
     src() {
       
-      return `/static/${this.name}.png`;
+      return `/static/${this.name}.svg`;
     },
   },
   created() {},
@@ -62,7 +65,7 @@ export default {
     display: block;
     width: 104rpx;
     position: relative;
-    left: -8rpx;
+    left: -10rpx;
     &.longer {
       width: 152rpx;
     }
@@ -70,7 +73,9 @@ export default {
   .name {
     word-break: none;
     position: absolute;
-    top: 12rpx;
+    top: 57.62%;
+    transform: translateY(-50%);
+    line-height: 1;
     left: 16rpx;
   }
 }

@@ -51,9 +51,9 @@ export default {
     right: 0;
     z-index: 3000;
     max-height: 95%;
-    // transition: all 0.3s cubic-bezier(0.7, 0.51, 0.02, 1.1);
+    transition: all 0.3s cubic-bezier(0.7, 0.51, 0.02, 1.1);
 
-    transition: all 0.3s;
+    // transition: all 0.3s;
     transform: translateY(100%);
     overflow: auto;
     &.show {

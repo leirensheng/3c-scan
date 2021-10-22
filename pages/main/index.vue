@@ -2,14 +2,21 @@
   <div class="main">
     <search
       :isLogin="isLogin"
-      v-if="isReady && tab === 'search'"
+      v-if="isReady"
+      v-show="tab === 'search'"
       :query="query"
     ></search>
-    <user :user="user" v-if="isReady && tab === 'user'" :isShow="isShow" />
+    <user
+      :user="user"
+      v-if="isReady"
+      v-show="tab === 'user'"
+      :isShow="isShow"
+      @changeQuery="handleChangeQuery"
+    />
     <uni-tabbar
       :isLogin="isLogin"
-      v-if="defaultTab"
-      :defaultTab="defaultTab"
+      v-if="tab"
+      v-model="tab"
       :isInIndex="false"
       @change="handleTabChane"
     ></uni-tabbar>
@@ -22,46 +29,52 @@ export default {
   components: {},
   data() {
     return {
-      user:null,
+      map: {
+        search: "CCC认证证书检索",
+        user: "我的",
+      },
+      user: null,
       isLogin: false,
       tab: "",
       query: null,
-      defaultTab: "",
       isReady: false,
-      isShow:false,
+      isShow: false,
     };
   },
   created() {},
 
   onLoad({ tab, query }) {
-    let map = {
-      search: "CCC认证证书检索",
-      user: "我的",
-    };
-    this.defaultTab = tab;
     this.tab = tab;
     if (query) {
       this.query = JSON.parse(decodeURIComponent(query));
     }
     uni.setNavigationBarTitle({
-      title: map[tab],
+      title: this.map[tab],
     });
     this.isReady = true;
   },
+  watch:{
+    tab(val){
+      uni.setNavigationBarTitle({
+        title: this.map[val],
+      });
+    }
+  },
   async onShow() {
     this.isLogin = await this.$checkLogin();
-    this.user = uni.getStorageSync('user')
-    this.isShow = true
+    this.user = uni.getStorageSync("user");
+    this.isShow = true;
   },
 
-  onHide(){
-    this.isShow = false
+  onHide() {
+    this.isShow = false;
   },
 
   mounted() {},
   methods: {
-    handleTabChane(tab) {
-      this.tab = tab;
+    handleChangeQuery(query){
+      this.tab = 'search'
+      this.query = query
     },
   },
 };

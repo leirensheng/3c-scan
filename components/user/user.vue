@@ -2,7 +2,9 @@
   <div class="user-page">
     <div class="top">
       <div class="left">
+        <div class="icon-wrap">
         <image class="icon" mode="widthFix" :src="src" @click="clickName" />
+        </div>
         <span @click="clickName">{{ username }}</span>
       </div>
       <div class="right">
@@ -10,7 +12,7 @@
       </div>
     </div>
     <div class="history">
-      <history :isShow="isShow" :isLogin="isLogin"></history>
+      <history :isShow="isShow" :isLogin="isLogin" @changeQuery="(val)=>$emit('changeQuery',val)"></history>
     </div>
     <div class="collect-part">
       <collect :isLogin="isLogin" :isShow="isShow"></collect>
@@ -58,7 +60,7 @@ export default {
       }
     },
     toHome() {
-      uni.navigateTo({
+      uni.redirectTo({
         url: "/pages/index/index",
       });
     },
@@ -68,7 +70,8 @@ export default {
 
 <style scoped lang="scss">
 .user-page {
-  padding-bottom: 134rpx;
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 150rpx);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 150rpx);
   .top {
     background-color: white;
     height: 202rpx;
@@ -83,11 +86,17 @@ export default {
       align-items: center;
       font-size: 32rpx;
       color: #262626;
-      .icon {
+      .icon-wrap {
         border-radius: 50%;
         width: 90rpx;
-        border: 1px solid rgb(213, 213, 213);
+        height: 90rpx;
+        border: 1rpx solid rgb(213, 213, 213);
         margin-right: 30rpx;
+        overflow: hidden;
+        will-change: transform;
+        .icon{
+          width: 90rpx;
+        }
       }
     }
     .right {
@@ -109,7 +118,7 @@ export default {
   .tips {
     padding-right: 24rpx;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     color: #292929;
     font-size: 24rpx;
     // line-height: 40rpx;

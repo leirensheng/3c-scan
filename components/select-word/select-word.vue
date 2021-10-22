@@ -1,27 +1,29 @@
 <template>
-  <div class="select-word">
-    <div class="top">
-      <div class="title">涂抹选择文字</div>
-      <div class="right" @click="close">
-        <div class="close"></div>
+  <div class="safe-bottom">
+    <div class="select-word">
+      <div class="top">
+        <div class="title">点击选择文字</div>
+        <div class="right" @click="close">
+          <div class="close"></div>
+        </div>
       </div>
-    </div>
 
-    <scroll-view scroll-y="true" class="content">
-      <div v-for="(item, index) in data" :key="index" class="one-part">
-        <span
-          @click="toggleSelect(one)"
-          v-for="(one, i) in item"
-          :class="one.isSelected ? 'word selected' : 'word'"
-          :key="i"
-          >{{ one.word }}</span
-        >
+      <scroll-view scroll-y="true" class="content">
+        <div v-for="(item, index) in data" :key="index" class="one-part">
+          <span
+            @click="toggleSelect(one)"
+            v-for="(one, i) in item"
+            :class="one.isSelected ? 'word selected' : 'word'"
+            :key="i"
+            >{{ one.word }}</span
+          >
+        </div>
+      </scroll-view>
+
+      <div class="bottom">
+        <div class="btn-primary" @click="close">取消选择</div>
+        <div class="btn" @click="confirm">确认</div>
       </div>
-    </scroll-view>
-
-    <div class="bottom">
-      <div class="btn-primary" @click="close">取消选择</div>
-      <div class="btn" @click="confirm">确认</div>
     </div>
 
     <!-- <div class="content">
@@ -97,7 +99,7 @@ export default {
   background-color: white;
   padding: 10rpx;
   .top {
-    border-bottom: 1px solid #d4d4d4;
+    border-bottom: 1rpx solid #d4d4d4;
     position: relative;
     .title {
       text-align: center;
@@ -150,7 +152,7 @@ export default {
         margin-right: 14rpx;
         margin-bottom: 22rpx;
         &.selected {
-          color: red;
+          // color: red;
           background-color: rgba(23, 240, 23, 0.2) !important;
         }
         // letter-spacing: 22rpx;
@@ -158,9 +160,13 @@ export default {
     }
   }
   .bottom {
+    padding: 0 14rpx;
     margin-bottom: 8rpx;
     display: flex;
-    gap: 20rpx;
+    justify-content: space-between;
+    .btn-primary,.btn{
+      width: 48% !important;
+    }
   }
 }
 </style>

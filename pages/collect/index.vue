@@ -1,19 +1,23 @@
 <template>
   <div class="collect-page">
-    <div class="one-day" v-for="item in data" :key="item.date">
-      <div class="date">{{ getShowDate(item.date) }}</div>
-      <uni-swipe-action>
+    <uni-swipe-action>
+      <div class="one-day" v-for="item in data" :key="item.date">
+        <div class="date">{{ getShowDate(item.date) }}</div>
         <uni-swipe-action-item
           v-for="(one, index) in item.data"
           :key="index"
-          :right-options="options"
-          @click="remove(item, one)"
-          class="one-collect"
+          class="collect-wrap"
         >
-          <result-item :result="one"></result-item>
+          <div class="delete-btn" slot="right" @click="remove(item, one)">
+            <div>取消</div>
+            <div>收藏</div>
+          </div>
+          <div class="one-collect">
+            <result-item :result="one" is-in-collect></result-item>
+          </div>
         </uni-swipe-action-item>
-      </uni-swipe-action>
-    </div>
+      </div>
+    </uni-swipe-action>
     <load-more v-if="!noMore"></load-more>
     <div class="no-more" v-else>没有更多了</div>
   </div>
@@ -31,15 +35,12 @@ export default {
       data: [],
       noMore: false,
       loading: false,
-      options: [
-        {
-          text: "取消收藏",
-          style: {
-            backgroundColor: "#E05A5B",
-          },
-        },
-      ],
     };
+  },
+  computed: {
+    hasLoadCnt() {
+      return this.data.reduce((prev, cur) => prev + cur.data.length, 0);
+    },
   },
   onShow() {
     this.refreshRemove();
@@ -87,22 +88,15 @@ export default {
       };
       return map[date] || date;
     },
-    formatDate(date) {
-      let month = date.getMonth() + 1;
-      month = month < 9 ? `0${month}` : month;
-      let day = date.getDate();
-      day = day < 9 ? `0${day}` : day;
-      let year = date.getFullYear();
-      return `${year}-${month}-${day}`;
-    },
+ 
     getTodayStr() {
       let date = new Date();
-      this.todayStr = this.formatDate(date);
+      this.todayStr = this.$formatDate(date);
     },
     getYesterdayStr() {
       let date = new Date();
       date.setDate(date.getDate() - 1);
-      this.yesterdayStr = this.formatDate(date);
+      this.yesterdayStr = this.$formatDate(date);
     },
     checkIsNoMore(res) {
       let days = Object.keys(res);
@@ -150,6 +144,13 @@ export default {
         this.data.splice(i, 1);
       }
       uni.hideLoading();
+
+      // 防止删除了第一页的,无法滑动到底部加载更多
+      this.$nextTick(() => {
+        if (!this.noMore && this.hasLoadCnt < 10) {
+          this.getData();
+        }
+      });
     },
   },
 };
@@ -171,14 +172,33 @@ export default {
       font-weight: 400;
     }
 
-    .one-collect {
+    .collect-wrap {
+      background: transparent;
       display: block;
-      box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.15);
-      border-radius: 4rpx;
-      background: white;
       margin-bottom: 32rpx;
+      transform: translateX(-10rpx);
+      .delete-btn {
+        margin: 10rpx 0;
+        padding: 44rpx;
+        line-height: 44rpx;
+        font-size: 32rpx;
+        background-color: #e05a5b;
+        color: white;
+        display: flex;
+        gap: 12rpx;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 4px;
+      }
       &:last-child {
         margin-bottom: 0;
+      }
+      .one-collect {
+        margin: 10rpx;
+        display: block;
+        border-radius: 4rpx;
+        background: white;
       }
     }
   }

@@ -1,4 +1,5 @@
-let baseUrl = process.env.NODE_ENV === 'production'?'https://3c.gdcers.com/3c-identify':'https://3c.gdcers.com/3c-identify'
+let baseUrl = 'https://3c.gdcers.com/3c-identify'
+// console.log(process.env.NODE_ENV)
 let http = (option) => {
   let { timeout = 16000, data, method = "get",url } = option;
   return new Promise((resolve, reject) => {

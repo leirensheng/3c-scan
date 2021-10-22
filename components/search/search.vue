@@ -15,14 +15,16 @@
         :value="form[item.id]"
         :range="item.options"
       >
-        <view>{{ item.options[form[item.id]] }}</view>
+        <div class="picker-content">
+          <view>{{ item.options[form[item.id]] }}</view>
+          <image
+            mode="widthFix"
+            v-if="item.type === 'select'"
+            class="icon"
+            src="/static/down.svg"
+          />
+        </div>
       </picker>
-      <image
-        mode="widthFix"
-        v-if="item.type === 'select'"
-        class="icon"
-        src="/static/down.svg"
-      />
     </div>
     <div class="btn" @click="search">查询</div>
   </div>
@@ -81,17 +83,16 @@ export default {
         return prev;
       }, {});
     } else {
-      let { status, category } = this.query;
-      let statusIndex = statusOptions.findIndex((one) => one === status);
-      let categoryIndex = categoryOptions.findIndex((one) => one === category);
-
-      // let status =
-      this.form = {
-        ...this.query,
-        status: statusIndex === -1 ? 0 : statusIndex,
-        category: categoryIndex === -1 ? 0 : categoryIndex,
-      };
+      this.setQueryToForm()
     }
+  },
+  watch: {
+    query: {
+      deep: true,
+      handler() {
+        this.setQueryToForm()
+      },
+    },
   },
   props: {
     isLogin: {
@@ -103,8 +104,18 @@ export default {
       default: () => null,
     },
   },
-
   methods: {
+    setQueryToForm() {
+      let { status, category } = this.query;
+      let statusIndex = statusOptions.findIndex((one) => one === status);
+      let categoryIndex = categoryOptions.findIndex((one) => one === category);
+
+      this.form = {
+        ...this.query,
+        status: statusIndex === -1 ? 0 : statusIndex,
+        category: categoryIndex === -1 ? 0 : categoryIndex,
+      };
+    },
     checkParams() {
       let fields = ["no", "clientName", "productName", "specifications"];
       return !fields.every((key) => this.form[key] === "");
@@ -165,22 +176,29 @@ export default {
   padding: 24rpx 24rpx 48rpx 24rpx;
   .row {
     position: relative;
-    border-bottom: 1px solid #d4d4d4;
+    border-bottom: 1rpx solid #d4d4d4;
     padding: 30rpx 0;
     display: flex;
     align-items: center;
-    font-size: 30rpx;
+    font-size: 32rpx;
     .label {
       margin-right: 48rpx;
     }
     :nth-child(2) {
       flex: 1;
     }
-    .icon {
-      position: absolute;
-      right: 0;
-      width: 29rpx;
-      // height: 16rpx;
+    input {
+      height: 100%;
+    }
+    .picker-content {
+      position: relative;
+      .icon {
+        position: absolute;
+        right: 20rpx;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 29rpx !important;
+      }
     }
   }
   .btn {

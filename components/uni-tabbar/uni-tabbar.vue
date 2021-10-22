@@ -1,11 +1,6 @@
 <template>
   <view class="bottom">
-    <div class="center" @click="scan">
       <image class="bg" mode="widthFix" src="/static/circle.png"></image>
-      <div class="circle">
-        <image class="camera" mode="widthFix" src="/static/camera.png"></image>
-      </div>
-    </div>
     <div class="content">
       <div class="left" @click="switchTab('search')">
         <img
@@ -18,7 +13,9 @@
 
         <span class="name" :class="isActiveSearch && 'active'">CCC查询</span>
       </div>
-
+      <div class="middle" @click="scan">
+        <image class="camera" mode="widthFix" src="/static/camera2.svg"></image>
+      </div>
       <div class="right" @click="switchTab('user')">
         <img
           v-if="isActiveUser"
@@ -50,7 +47,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    defaultTab: {
+    value: {
       type: String,
       default: "user",
     },
@@ -65,8 +62,13 @@ export default {
     if (this.isInIndex) {
       this.isActiveUser = this.isActiveSearch = true;
     } else {
-      this.changeTab(this.defaultTab);
+      this.changeTab(this.value);
     }
+  },
+  watch:{
+    value(){
+      this.changeTab(this.value)
+    },
   },
   methods: {
     async scan() {
@@ -90,9 +92,9 @@ export default {
       }
     },
     switchTab(tab) {
-      this.$emit("change", tab);
-      if (!this.isInIndex) {
-        this.changeTab(tab);
+      this.$emit("input", tab);
+      if (this.isInIndex) {
+         this.$emit('tabClick',tab)
       }
     },
   },
@@ -103,44 +105,27 @@ export default {
 .bottom {
   position: fixed;
   bottom: 0;
+  box-sizing: content-box;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+
   width: 100%;
   height: 140rpx;
-  .center {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    width: 200rpx;
-    z-index: 6;
-    .bg {
-      position: absolute;
-      width: 200rpx;
-      // left: 5rpx;
-      top: -12rpx;
-    }
-    .circle {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-top: 8rpx;
-      position: relative;
-      z-index: 2;
-      width: 120rpx;
-      height: 120rpx;
-      border-radius: 50%;
-      background-color: #355dee;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .camera {
-        width: 60rpx;
-      }
-    }
-  }
-  .content {
-    background-color: white;
 
-    box-shadow: 0px -1px 2px 0px rgba(0, 21, 41, 0.18);
+    .bg {
+          position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 6;
+      position: absolute;
+      width: 750rpx;
+      top: -13rpx;
+    }
+
+  
+  .content {
+    z-index: 7;
+    background-color: white;
     position: absolute;
     bottom: 0;
     height: 76%;
@@ -148,7 +133,14 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 100rpx;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    .left{
+      margin-left: 80rpx;
+    }
+    .right{
+      margin-right: 80rpx;
+    }
     .left,
     .right {
       .icon {
@@ -157,14 +149,31 @@ export default {
       }
       .name {
         font-size: 24rpx;
+        color: #999999;
         &.active {
           color: #355dee;
         }
       }
-      width: 100rpx;
+      width: 120rpx;
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    .middle {
+      position: relative;
+      top: -14%;
+      z-index: 2;
+      width: 115rpx;
+      height: 115rpx;
+      border-radius: 50%;
+      background-color: #355dee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .camera {
+        width: 60rpx;
+      }
     }
   }
 }

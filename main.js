@@ -11,9 +11,9 @@ Vue.prototype.$formatDate = (val) => {
     date = new Date(val);
   }
   let month = date.getMonth() + 1;
-  month = month < 9 ? `0${month}` : month;
+  month = month <= 9 ? `0${month}` : month;
   let day = date.getDate();
-  day = day < 9 ? `0${day}` : day;
+  day = day <= 9 ? `0${day}` : day;
   let year = date.getFullYear();
   return `${year}-${month}-${day}`;
 };

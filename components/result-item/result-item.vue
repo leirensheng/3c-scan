@@ -1,14 +1,33 @@
 <template>
-  <div class="result-item" :class="isInUser && 'in-user'" @click="gotoDetail">
-    <div class="top">
-      <uni-valid :status="result.status"></uni-valid>
-      <div class="company">{{ result.clientName }}</div>
-    </div>
-    <div class="bottom">
-      <div class="row" v-for="(item, index) in config" :key="index">
-        <div class="name">{{ item.name }}</div>
-        <div class="value">{{ getVal(item.type, result[item.id]) }}</div>
+  <div
+    class="result-item"
+    :class="isInUser ? 'in-user' : isInCollect ? 'in-collect' : ''"
+    @click="gotoDetail"
+  >
+    <div v-show="!loading">
+      <div class="top">
+        <uni-valid :status="result.status"></uni-valid>
+        <div class="company">{{ result.clientName }}</div>
       </div>
+      <div class="bottom">
+        <div class="row" v-for="(item, index) in config" :key="index">
+          <div class="name">{{ item.name }}</div>
+          <div class="value">{{ getVal(item.type, result[item.id]) }}</div>
+        </div>
+      </div>
+    </div>
+    <div v-show="loading" class="loading">
+      <div class="top">
+        <uni-valid></uni-valid>
+        <div class="company"></div>
+      </div>
+      <div class="bottom">
+        <div class="row" v-for="(item, index) in config" :key="index">
+          <div class="name"></div>
+          <div class="value"></div>
+        </div>
+      </div>
+      <div class="light"></div>
     </div>
   </div>
 </template>
@@ -24,6 +43,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    isInCollect: {
+      type: Boolean,
+      default: false,
+    },
+    loading:{
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -66,6 +93,7 @@ export default {
       return val;
     },
     gotoDetail() {
+      if(this.loading) return
       let url = "/pages/certificate/detail?id=" + this.result.id;
       uni.navigateTo({
         url,
@@ -82,22 +110,21 @@ $dark: rgba(0, 0, 0, 0.85);
   border-radius: 4px;
   padding-top: 32rpx;
   background-color: white;
-  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 12rpx 0px rgba(0, 0, 0, 0.15);
   &.in-user {
     padding-top: 12rpx;
     box-shadow: none;
+    border: none;
   }
   .top {
     display: flex;
-    align-items: center;
-    gap: 0 16rpx;
-    .status {
-      // margin-right: 16rpx;
-    }
+    align-items: flex-end;
     .company {
       color: $dark;
       position: relative;
       top: 1px;
+      line-height: 50rpx;
       // line-height: 44rpx;
       font-weight: 500;
       font-size: 32rpx;
@@ -127,6 +154,40 @@ $dark: rgba(0, 0, 0, 0.85);
         -webkit-box-orient: vertical;
         display: -webkit-box;
         text-overflow: ellipsis;
+      }
+    }
+  }
+  .loading {
+    $grey: #ededed;
+    color: $grey;
+    position: relative;
+    .top {
+      .company {
+        background: $grey;
+        flex: 1;
+        height: 32rpx;
+        margin: 9rpx 0;
+        margin-right: 22rpx;
+      }
+    }
+    .bottom {
+      .row {
+        margin: 28rpx 0;
+        &:first-child {
+          margin-top: 14rpx;
+        }
+        &:last-child {
+          margin-bottom: 14rpx;
+        }
+        .name {
+          background: $grey;
+          height: 28rpx;
+        }
+        .value {
+          background: $grey;
+          flex: 1;
+          height: 28rpx;
+        }
       }
     }
   }
