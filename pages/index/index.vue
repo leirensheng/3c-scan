@@ -39,6 +39,12 @@ export default {
   async onShow() {
     this.isLogin = await this.$checkLogin();
   },
+  onShareAppMessage() {
+    return {
+      title: " ",
+      path: "/pages/index/index",
+    };
+  },
   created() {},
   mounted() {},
   methods: {
