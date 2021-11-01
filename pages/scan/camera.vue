@@ -107,7 +107,7 @@ export default {
       let isNoResult = res.imageText===''
       if (isNoResult) {
         uni.navigateTo({
-          url: "/pages/scan/noResult",
+          url: "/pages/scan/result",
         });
       } else {
         let obj = keys.reduce((prev, cur) => {
