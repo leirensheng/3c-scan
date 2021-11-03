@@ -119,7 +119,6 @@ export default {
       this.isSyncing = Number(isSyncing||'');
       this.imageTextSplits = val.imageTextSplits;
       this.form = { ...val };
-      delete this.form.imageText;
       delete this.form.imageTextSplits;
     }
   },

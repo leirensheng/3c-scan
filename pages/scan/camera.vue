@@ -114,7 +114,9 @@ export default {
           prev[cur] = res[cur];
           return prev;
         }, {});
-        obj.imageText = res.imageText;
+        let {imageText,imagePath} = res
+        obj.imageText = imageText;
+        obj.imagePath  = imagePath
         obj.imageTextSplits = res.imageTextSplits;
         uni.navigateTo({
           url:
