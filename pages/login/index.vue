@@ -2,39 +2,17 @@
   <div class="login">
     <image class="pic" mode="widthFix" src="/static/logo.png"></image>
     <div class="title">CCC认证智能识别工具</div>
-    <!-- <div class="sub-title" v-if="!hasGetUser">
+    <div class="sub-title">
       您暂未授权CCC认证智能识别工具小程序获取你的信息，将无法正常使用小程序功能。如需正常使用，请点击“授权”按钮，打开头像、昵称等信息的授权。
-    </div> -->
+    </div>
 
     <div class="bottom">
-      <div class="agree">
-        <radio
-          value="1"
-          :checked="isAgree"
-          style="transform: scale(0.6)"
-          color="#327CF9"
-          @click="clickAgreeRadio"
-        /><span @click="clickAgreeRadio">我已阅读并同意 CCC认证智能识别工具</span>
-        <span class="xieyi" @click="gotoServiceAgreement">《用户协议》</span>
-      </div>
-
       <button
         class="btn"
-        :disabled="!isReady||!isAgree"
+        :disabled="!isReady"
         @click="login"
       >
-        <image
-          class="icon enabled"
-          mode="widthFix"
-          src="/static/wechat.svg"
-        ></image>
-        <image
-          class="icon disabled"
-          mode="widthFix"
-          src="/static/wechat-disabled.svg"
-        ></image>
-
-        <span>微信用户快捷登录</span>
+        <span>授权登录</span>
       </button>
 
       <div class="btn-primary" @click="back">取消</div>
@@ -49,8 +27,6 @@ import { getCode, newGetUserInfo, oldGetUserInfo } from "./login.js";
 export default {
   data() {
     return {
-      hasGetUser: false,
-      isAgree: false,
       code: "",
       isNewApi: false,
       loading: false,
@@ -110,7 +86,6 @@ export default {
         uni.setStorageSync("user", user);
         uni.setStorageSync("openId", user.openId);
         console.log("用户信息缓存成功");
-        this.hasGetUser = true;
         uni.setStorageSync("jsCode", this.code);
         uni.navigateBack();
       } catch (e) {
@@ -120,16 +95,6 @@ export default {
       // this.loading = false;
     },
 
-    // 服务协议
-    gotoServiceAgreement() {
-      uni.navigateTo({
-        url: "/pages/serviceAgreement/index",
-      });
-    },
-    // 点击同意单选框
-    clickAgreeRadio() {
-      this.isAgree = !this.isAgree;
-    },
     back() {
       uni.navigateBack();
     },
@@ -169,19 +134,6 @@ export default {
   .icon {
     width: 40rpx;
     margin-right: 12rpx;
-  }
-  .agree {
-    font-size: 28rpx;
-    line-height: 40rpx;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: #999999;
-    .xieyi {
-      color: #355dee;
-    }
-    //   margin-top: ;
   }
   .grey {
     background-color: rgb(241, 239, 239);
