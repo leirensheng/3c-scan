@@ -8,7 +8,8 @@
     <div class="btn" v-if="isNoRecomend" @click="toCamera">重新拍照</div>
 
     <div v-else class="bottom">
-      <my-tab v-model="tab"></my-tab>
+      <div class="tips">已为您推荐相关证书</div>
+      <my-tab v-model="tab" class="tab"></my-tab>
 
       <div class="items" v-if="tab === 0">
         <template v-if="enList.length">
@@ -129,7 +130,13 @@ export default {
     //   width: 95%;
   }
   .bottom {
-    margin-top: 82rpx;
+    .tips {
+      margin-top: 8rpx;
+      margin-bottom: 52rpx;
+      font-size: 14px;
+      text-align: center;
+    }
+
     .items {
       background-color: #f5f5f5;
       padding: 32rpx 24rpx;
