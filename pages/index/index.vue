@@ -13,10 +13,9 @@
         <div class="desc">* 请拍取产品标签</div>
       </div>
       <div class="bottom">
-        <div class="left">广州海关技术中心</div>
+        <div class="left">消费者报道杂志社有限公司</div>
         <div class="right">
-          <div>消费者报道杂志社有限公司</div>
-          <div>正选™数据中心</div>
+          <div>广州正选信息技术有限公司</div>
         </div>
       </div>
     </div>
