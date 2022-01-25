@@ -1,4 +1,10 @@
-let baseUrl = 'https://3c.gdcers.com/3c-identify'
+import env from "./getEnv.js";
+let map = {
+  develop: "https://3ctest.gdcers.com/3c-identify",
+
+  trial: "https://3ctest.gdcers.com/3c-identify",
+};
+let baseUrl = map[env] || "https://3c.gdcers.com/3c-identify";
 // console.log(process.env.NODE_ENV)
 let http = (option) => {
   let { timeout = 16000, data, method = "get",url } = option;
